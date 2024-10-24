@@ -4,7 +4,7 @@ import { Box, Container, Grid, Typography } from '@mui/material';
 import CustomTextField from './../customTextField'; // Adjust the path as necessary
 import CustomButton from '../CustomButton';
 
-export default function CreateMovie({ onSave, onClose }) { // Accept the onSave prop
+export default function CreateMovie({ onSave, onClose }) {
     // State for title, year, and error messages
     const [formData, setFormData] = useState({ title: '', year: '', image: null });
     const [errors, setErrors] = useState({ title: '', year: '' });
@@ -53,10 +53,55 @@ export default function CreateMovie({ onSave, onClose }) { // Accept the onSave 
         }
     };
 
+    // Define styles
+    const styles = {
+        container: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            paddingTop: '50px',
+        },
+        titleBox: {
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
+        },
+        title: {
+            color: 'white',
+            fontFamily: 'Montserrat',
+            fontWeight: 600,
+            fontSize: { xs: '20px', sm: '25px', md: '48px' },
+            textAlign: 'left',
+            width: '100%',
+        },
+        dropzone: {
+            width: '100%',
+            height: '400px',
+            border: '2px dashed grey',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            backgroundColor: '#1E2A38',
+            marginBottom: '20px',
+        },
+        imagePreview: {
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: '10px',
+        },
+        buttonBox: {
+            display: 'flex',
+            gap: '10px',
+            marginTop: '20px',
+        },
+    };
+
     return (
-        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '50px' }}>
-            <Box display="flex" alignItems="center" width="100%">
-                <Typography variant="h4" sx={{ color: 'white', fontFamily: 'Montserrat', fontWeight: 600, fontSize: { xs: '20px', sm: '25px', md: '48px' }, textAlign: 'left', width: '100%' }}>
+        <Container sx={styles.container}>
+            <Box sx={styles.titleBox}>
+                <Typography variant="h4" sx={styles.title}>
                     Create a new movie
                 </Typography>
             </Box>
@@ -64,22 +109,11 @@ export default function CreateMovie({ onSave, onClose }) { // Accept the onSave 
                 <Grid item xs={12} md={6}>
                     <Box
                         {...getRootProps()}
-                        sx={{
-                            width: '100%',
-                            height: '400px',
-                            border: '2px dashed grey',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            backgroundColor: '#1E2A38',
-                            marginBottom: '20px',
-                        }}
+                        sx={styles.dropzone}
                     >
                         <input {...getInputProps()} />
                         {formData.image ? (
-                            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+                            <Box sx={styles.imagePreview}>
                                 <img
                                     src={URL.createObjectURL(formData.image)}
                                     alt="Preview"
@@ -94,7 +128,7 @@ export default function CreateMovie({ onSave, onClose }) { // Accept the onSave 
                     </Box>
                 </Grid>
                 <Grid item xs={12} md={5} sx={{ marginLeft: { md: 0, lg: '50px' } }}>
-                    <Grid item xs={12} md={12} >
+                    <Grid item xs={12} md={12}>
                         <CustomTextField
                             label="Title"
                             name="title"
@@ -104,7 +138,7 @@ export default function CreateMovie({ onSave, onClose }) { // Accept the onSave 
                             helperText={errors.title}
                         />
                     </Grid>
-                    <Grid item xs={12} md={6} >
+                    <Grid item xs={12} md={6}>
                         <CustomTextField
                             label="Publishing year"
                             name="year"
@@ -114,7 +148,7 @@ export default function CreateMovie({ onSave, onClose }) { // Accept the onSave 
                             helperText={errors.year}
                         />
                     </Grid>
-                    <Box sx={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+                    <Box sx={styles.buttonBox}>
                         <CustomButton children={"Cancel"} width='167px' variant="outline" onClick={onClose} />
                         <CustomButton children={'Submit'} width='179px' onClick={handleSubmit} />
                     </Box>

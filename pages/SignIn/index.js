@@ -1,25 +1,19 @@
-import * as React from 'react';
-import { useState } from 'react';
-import { Box, TextField, Typography, Container, Checkbox, FormControlLabel } from '@mui/material';
-import CustomButton from '../../components/CustomButton';
+import React, { useState } from 'react';
+import { Box, Typography, Container } from '@mui/material';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
+import CustomButton from '../../components/CustomButton';
 import Link from 'next/link';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
-import {postData} from '../../Api/apiFunction'; // Adjust the import based on your project structure
+import { postData } from '../../Api/apiFunction';
+import TextInput from '../../components/TextInput';
+import RememberMeCheckbox from '../../components/RememberMeCheckbox';
 
 export default function Login() {
-  const { t } = useTranslation(); // Initialize translation
+  const { t } = useTranslation();
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [rememberMe, setRememberMe] = useState(false);
-  const [errors, setErrors] = useState({
-    email: '',
-    password: '',
-  });
+  const [errors, setErrors] = useState({ email: '', password: '' });
 
   const validate = () => {
     let valid = true;
@@ -28,18 +22,18 @@ export default function Login() {
 
     if (!formData.email) {
       valid = false;
-      errors.email = t('login.email') + ' is required'; // Updated to use translation
+      errors.email = `${t('login.email')} is required`;
     } else if (!emailPattern.test(formData.email)) {
       valid = false;
-      errors.email = t('login.email') + ' is invalid'; // Updated to use translation
+      errors.email = `${t('login.email')} is invalid`;
     }
 
     if (!formData.password) {
       valid = false;
-      errors.password = t('login.password') + ' is required'; // Updated to use translation
+      errors.password = `${t('login.password')} is required`;
     } else if (formData.password.length < 6) {
       valid = false;
-      errors.password = t('login.password') + ' must be at least 6 characters'; // Updated to use translation
+      errors.password = `${t('login.password')} must be at least 6 characters`;
     }
 
     setErrors(errors);
@@ -49,21 +43,12 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validate()) {
-      console.log('Form submitted:', formData);
-      console.log('Remember me:', rememberMe);
-
       try {
-        console.log(formData)
-        // Call the postData function with the sign-in path and form data
         const response = await postData('/auth/signin', formData);
-        // Save the token (you might want to save it in localStorage)
-        console.log(response)
         localStorage.setItem('token', response.token);
-        // Redirect to the movie screen after successful login
         router.push('/movieScreen');
       } catch (error) {
         console.error('Login error:', error);
-        // Handle error here (e.g., show an error message)
       }
     }
   };
@@ -79,104 +64,87 @@ export default function Login() {
     setRememberMe(event.target.checked);
   };
 
+  const styles = {
+    container: {
+      minHeight: '90vh',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    formContainer: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    title: {
+      color: 'white',
+      fontFamily: "'Montserrat', sans-serif",
+      fontSize: { xs: '40px', md: '64px' },
+      fontWeight: 600,
+    },
+    form: {
+      marginTop: 1,
+    },
+    checkboxContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+    },
+    linkText: {
+      marginTop: 2,
+      color: 'white',
+      fontFamily: 'Montserrat',
+    },
+    signUpLink: {
+      color: '#FFD700',
+      cursor: 'pointer',
+    },
+  };
+
   return (
     <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          minHeight: '90vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography component="h1" variant="h5" sx={{ color: 'white', fontFamily: "'Montserrat', sans-serif", fontSize: { xs: '40px', md: "64px" }, fontWeight: 600 }}>
-            {t('login.title')} {/* Localized title */}
+      <Box sx={styles.container}>
+        <Box sx={styles.formContainer}>
+          <Typography component="h1" variant="h5" sx={styles.title}>
+            {t('login.title')}
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              fullWidth
+          <Box component="form" onSubmit={handleSubmit} sx={styles.form}>
+            <TextInput
               id="email"
-              label={t('login.email')} // Localized label
+              label={t('login.email')}
               name="email"
               value={formData.email}
               onChange={handleChange}
-              error={!!errors.email}
+              error={errors.email}
               helperText={errors.email}
-              InputLabelProps={{ style: { color: 'white' } }}
-              InputProps={{
-                sx: { color: 'white', background: '#224957', borderRadius: "10px", disableUnderline: true, fontFamily: "Montserrat", fontSize: 14, fontWeight: '400', lineHeight: '24px' },
-              }}
             />
-            <TextField
-              margin="normal"
-              fullWidth
-              name="password"
-              label={t('login.password')} // Localized label
-              type="password"
+            <TextInput
               id="password"
+              label={t('login.password')}
+              name="password"
+              type="password"
               value={formData.password}
               onChange={handleChange}
-              error={!!errors.password}
+              error={errors.password}
               helperText={errors.password}
-              InputLabelProps={{ style: { color: 'white' } }}
-              InputProps={{
-                sx: {
-                  color: 'white',
-                  background: '#224957',
-                  borderRadius: '10px',
-                  fontFamily: 'Montserrat',
-                  fontSize: 14,
-                  fontWeight: '400',
-                  lineHeight: '24px',
-                },
-              }}
             />
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '100%',
-              }}
-            >
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={rememberMe}
-                    onChange={handleRememberMeChange}
-                    sx={{
-                      color: '#224957',
-                      '&.Mui-checked': {
-                        color: '#224957',
-                      },
-                      '&.Mui-checked svg': {
-                        color: 'red',
-                      },
-                    }}
-                  />
-                }
-                label={<Typography sx={{ color: 'white', fontSize: 16, fontWeight: 400, fontFamily: "Montserrat" }}>{t('login.rememberMe')}</Typography>} // Localized label
+            <Box sx={styles.checkboxContainer}>
+              <RememberMeCheckbox
+                checked={rememberMe}
+                onChange={handleRememberMeChange}
+                label={t('login.rememberMe')}
               />
             </Box>
-            <CustomButton type="submit">
-              {t('login.signIn')} {/* Localized button text */}
-            </CustomButton>
+            <CustomButton type="submit">{t('login.signIn')}</CustomButton>
           </Box>
-          <Typography sx={{ mt: 2, color: 'white', fontFamily: 'Montserrat' }}>
+          <Typography sx={styles.linkText}>
             {t('login.noAccount')}{' '}
             <Link href="/signUp" passHref>
-              <Typography component="span" sx={{ color: '#FFD700', cursor: 'pointer' }}>
-                {t('login.signUp')} {/* Localized link text */}
+              <Typography component="span" sx={styles.signUpLink}>
+                {t('login.signUp')}
               </Typography>
             </Link>
           </Typography>

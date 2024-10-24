@@ -1,10 +1,13 @@
 // Import the postData function
 import { useRouter } from 'next/router';
-import { postData } from './../../Api/apiFunction'; // Adjust the import path based on your folder structure
+import { postData } from './../../Api/apiFunction'; 
 import React, { useState } from 'react';
-import { Box, TextField, Typography, Container, Checkbox, FormControlLabel } from '@mui/material';
+import { Box, Typography, Container } from '@mui/material';
 import CustomButton from '../../components/CustomButton';
 import Link from 'next/link';
+import TextInput from '../../components/TextInput'; 
+import RememberMeCheckbox from '../../components/RememberMeCheckbox'; 
+
 export default function SignUp() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -75,103 +78,89 @@ export default function SignUp() {
     setRememberMe(event.target.checked);
   };
 
+  // Styling object
+  const styles = {
+    mainContainer: {
+      minHeight: '90vh',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    formContainer: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    title: {
+      color: 'white',
+      fontFamily: "'Montserrat', sans-serif",
+      fontSize: { xs: '40px', md: "64px" },
+      fontWeight: 600,
+    },
+    form: {
+      mt: 1,
+    },
+    checkboxContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+    },
+    linkText: {
+      mt: 2,
+      color: 'white',
+      fontFamily: 'Montserrat',
+    },
+    signInLink: {
+      color: '#FFD700',
+      cursor: 'pointer',
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          minHeight: '90vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography component="h1" variant="h5" sx={{ color: 'white', fontFamily: "'Montserrat', sans-serif", fontSize: { xs: '40px', md: "64px" }, fontWeight: 600 }}>
+      <Box sx={styles.mainContainer}>
+        <Box sx={styles.formContainer}>
+          <Typography component="h1" variant="h5" sx={styles.title}>
             Sign up
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              fullWidth
+          <Box component="form" onSubmit={handleSubmit} sx={styles.form}>
+            <TextInput
               id="email"
               label="Email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              error={!!errors.email}
+              error={errors.email}
               helperText={errors.email}
-              InputLabelProps={{ style: { color: 'white' } }}
-              InputProps={{
-                sx: { color: 'white', background: '#224957', borderRadius: "10px", disableUnderline: true, fontFamily: "Montserrat", fontSize: 14, fontWeight: '400', lineHeight: '24px' },
-              }}
             />
-            <TextField
-              margin="normal"
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
+            <TextInput
               id="password"
+              label="Password"
+              name="password"
+              type="password"
               value={formData.password}
               onChange={handleChange}
-              error={!!errors.password}
+              error={errors.password}
               helperText={errors.password}
-              InputLabelProps={{ style: { color: 'white' } }}
-              InputProps={{
-                sx: {
-                  color: 'white',
-                  background: '#224957',
-                  borderRadius: '10px',
-                  fontFamily: 'Montserrat',
-                  fontSize: 14,
-                  fontWeight: '400',
-                  lineHeight: '24px',
-                },
-              }}
             />
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '100%',
-              }}
-            >
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={rememberMe}
-                    onChange={handleRememberMeChange}
-                    sx={{
-                      color: '#224957',
-                      '&.Mui-checked': {
-                        color: '#224957',
-                      },
-                      '&.Mui-checked svg': {
-                        color: 'red',
-                      },
-                    }}
-                  />
-                }
-                label={<Typography sx={{ color: 'white', fontSize: 16, fontWeight: 400, fontFamily: "Montserrat" }}>Remember me</Typography>}
+            <Box sx={styles.checkboxContainer}>
+              <RememberMeCheckbox
+                checked={rememberMe}
+                onChange={handleRememberMeChange}
+                label="Remember me"
               />
             </Box>
             <CustomButton type="submit">
               Sign Up
             </CustomButton>
           </Box>
-          <Typography sx={{ mt: 2, color: 'white', fontFamily: 'Montserrat' }}>
+          <Typography sx={styles.linkText}>
             Already have an account?{' '}
             <Link href="/SignIn" passHref>
-              <Typography component="span" sx={{ color: '#FFD700', cursor: 'pointer' }}>
+              <Typography component="span" sx={styles.signInLink}>
                 Sign in
               </Typography>
             </Link>
