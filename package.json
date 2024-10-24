@@ -6,9 +6,16 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.5",
+    "@mui/material": "^6.1.5",
+    "i18next": "^23.16.3",
     "next": "latest",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.10",
+    "react-i18next": "^15.1.0"
   },
   "engines": {
     "node": ">=18"

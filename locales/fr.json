@@ -1,0 +1,11 @@
+{
+    "login": {
+      "title": "Se connecter",
+      "email": "Email",
+      "password": "Mot de passe",
+      "rememberMe": "Se souvenir de moi",
+      "signIn": "Se connecter",
+      "noAccount": "Vous n'avez pas de compte?",
+      "signUp": "S'inscrire"
+    }
+  }

@@ -1,0 +1,12 @@
+{
+    "login": {
+      "title": "Sign in",
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "signIn": "Sign In",
+      "noAccount": "Don’t have an account?",
+      "signUp": "Sign up"
+    }
+  }
+  
