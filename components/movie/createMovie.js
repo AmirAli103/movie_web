@@ -106,7 +106,14 @@ export default function CreateMovie({ onSave, onClose, loading }) {
 
     return (
         <Container sx={styles.container}>
-            <TitleBox title="Create a new movie" />
+            <Box sx={{ 
+                marginTop: { xs: '5vh', sm: '10vh', md: '15vh', lg: '20vh' }, 
+                width: '100%' 
+            }}>
+                <TitleBox title="Create a new movie" />
+
+            </Box>
+            
             <Grid container spacing={2} mt={'10%'}>
             <Grid item xs={12} md={6}>
                     <DropzoneBox image={formData.image} setImage={(file) => setFormData((prev) => ({ ...prev, image: file }))} />

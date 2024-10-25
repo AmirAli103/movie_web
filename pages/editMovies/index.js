@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Container, Grid, CircularProgress } from '@mui/material';
+import { Container, Grid, CircularProgress,Box } from '@mui/material';
 import TitleBox from './../../components/movie/titleComponent';
 import DropzoneBox from './../../components/movie/dropBoxZone';
 import FormFields from './../../components/movie/formField';
@@ -86,7 +86,12 @@ const EditMovie=({ onSave, onClose, loading })=> {
 
     return (
         <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <TitleBox title="Edit movie" />
+            <Box sx={{ 
+                marginTop: { xs: '5vh', sm: '10vh', md: '15vh', lg: '20vh' }, 
+                width: '100%' 
+            }}>
+                <TitleBox title="Edit movie" />
+            </Box>
             <Grid container spacing={2} mt="10%">
                 <Grid item xs={12} md={6}>
                     <DropzoneBox image={formData.image} setImage={(file) => setFormData((prev) => ({ ...prev, image: file }))} />

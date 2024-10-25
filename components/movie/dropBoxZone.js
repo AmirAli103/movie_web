@@ -11,7 +11,7 @@ export default function DropzoneBox({ image, setImage }) {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
     return (
-        <Box {...getRootProps()} sx={{ width: { xs: "250px", sm: "400px", lg: '473px' }, height: { xs: "300px", md: '450px', lg: '504px' }, border: '2px dashed white', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', backgroundColor: '#224957', marginBottom: '20px' }}>
+        <Box {...getRootProps()} sx={{ width: { xs: "250px", sm: "250px", lg: '473px' }, height: { xs: "300px", md: '250px', lg: '504px' }, border: '2px dashed white', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', backgroundColor: '#224957', marginBottom: '20px' }}>
             <input {...getInputProps()} />
             {image ? (
                 <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
