@@ -1,16 +1,21 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, CircularProgress, Container, Grid, Typography } from '@mui/material';
 import CustomTextField from './../customTextField'; // Adjust the path as necessary
 import CustomButton from '../CustomButton';
-
-export default function CreateMovie({ onSave, onClose }) {
+import AddIcon from '@mui/icons-material/Add';
+import TitleBox from './titleComponent';
+import FormFields from './formField';
+import Buttons from './Button';
+import DropzoneBox from './dropBoxZone';
+export default function CreateMovie({ onSave, onClose, loading }) {
     // State for title, year, and error messages
     const [formData, setFormData] = useState({ title: '', year: '', image: null });
     const [errors, setErrors] = useState({ title: '', year: '' });
 
     // Dropzone for image
     const onDrop = useCallback((acceptedFiles) => {
+        console.log(acceptedFiles[0])
         setFormData((prev) => ({ ...prev, image: acceptedFiles[0] }));
     }, []);
 
@@ -22,7 +27,6 @@ export default function CreateMovie({ onSave, onClose }) {
         setFormData((prev) => ({ ...prev, [name]: value }));
         setErrors((prev) => ({ ...prev, [name]: '' })); // Clear error on change
     };
-
     // Validate fields
     const validate = () => {
         let tempErrors = { title: '', year: '' };
@@ -59,7 +63,6 @@ export default function CreateMovie({ onSave, onClose }) {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            paddingTop: '50px',
         },
         titleBox: {
             display: 'flex',
@@ -75,15 +78,15 @@ export default function CreateMovie({ onSave, onClose }) {
             width: '100%',
         },
         dropzone: {
-            width: '100%',
-            height: '400px',
-            border: '2px dashed grey',
+            width: { xs: "250px", sm: "400px", lg: '473px' },
+            height: { xs: "300px", md: '450px', lg: '504px' },
+            border: '2px dashed white',
             borderRadius: '8px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: 'white',
-            backgroundColor: '#1E2A38',
+            backgroundColor: '#224957',
             marginBottom: '20px',
         },
         imagePreview: {
@@ -95,63 +98,26 @@ export default function CreateMovie({ onSave, onClose }) {
             display: 'flex',
             gap: '10px',
             marginTop: '20px',
+        }, icon: {
+            width: '24px',
+            height: '24px',
         },
     };
 
     return (
         <Container sx={styles.container}>
-            <Box sx={styles.titleBox}>
-                <Typography variant="h4" sx={styles.title}>
-                    Create a new movie
-                </Typography>
-            </Box>
+            <TitleBox title="Create a new movie" />
             <Grid container spacing={2} mt={'10%'}>
-                <Grid item xs={12} md={6}>
-                    <Box
-                        {...getRootProps()}
-                        sx={styles.dropzone}
-                    >
-                        <input {...getInputProps()} />
-                        {formData.image ? (
-                            <Box sx={styles.imagePreview}>
-                                <img
-                                    src={URL.createObjectURL(formData.image)}
-                                    alt="Preview"
-                                    style={{ width: '100%', height: 'auto', borderRadius: '8px' }} // Adjust as needed
-                                />
-                            </Box>
-                        ) : isDragActive ? (
-                            <Typography>Drop an image here...</Typography>
-                        ) : (
-                            <Typography>Drop an image here</Typography>
-                        )}
-                    </Box>
+            <Grid item xs={12} md={6}>
+                    <DropzoneBox image={formData.image} setImage={(file) => setFormData((prev) => ({ ...prev, image: file }))} />
                 </Grid>
                 <Grid item xs={12} md={5} sx={{ marginLeft: { md: 0, lg: '50px' } }}>
-                    <Grid item xs={12} md={12}>
-                        <CustomTextField
-                            label="Title"
-                            name="title"
-                            value={formData.title}
-                            onChange={handleChange}
-                            error={!!errors.title}
-                            helperText={errors.title}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <CustomTextField
-                            label="Publishing year"
-                            name="year"
-                            value={formData.year}
-                            onChange={handleChange}
-                            error={!!errors.year}
-                            helperText={errors.year}
-                        />
-                    </Grid>
-                    <Box sx={styles.buttonBox}>
-                        <CustomButton children={"Cancel"} width='167px' variant="outline" onClick={onClose} />
-                        <CustomButton children={'Submit'} width='179px' onClick={handleSubmit} />
-                    </Box>
+                    <FormFields title={formData.title} year={formData.year} onChange={handleChange} errors={errors} />
+                    <Buttons
+                        loading={loading} 
+                        onClose={onClose} 
+                        onSubmit={handleSubmit} 
+                    />
                 </Grid>
             </Grid>
         </Container>

@@ -50,23 +50,22 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validate()) {
-      console.log('Form submitted:', formData);
-      console.log('Remember me:', rememberMe);
-
       try {
-        // Call postData with the signup path and formData
-        const result = await postData('/auth/signup', formData);
-        console.log('Signup successful:', result);
-        
-        // You can redirect or perform actions based on the result
-        router.push('/movieScreen');
+        const response = await postData('/auth/signUp', formData);
+        console.log("response: ", JSON.stringify(response));
+  
+        // Check if the access_token is present in the response
+        if (response.access_token) {
+          localStorage.setItem('access_token', response.access_token);
+          await router.push('/movieScreen'); // You can await here if needed
+        } else {
+          console.error('Token not found in the response.');
+        }
       } catch (error) {
-        console.error('Signup failed:', error);
-        // Handle the error appropriately (e.g., show an error message to the user)
+        console.error('Login error:', error);
       }
-    }
   };
-
+  }
   const handleChange = (event) => {
     setFormData({
       ...formData,
@@ -146,13 +145,6 @@ export default function SignUp() {
               error={errors.password}
               helperText={errors.password}
             />
-            <Box sx={styles.checkboxContainer}>
-              <RememberMeCheckbox
-                checked={rememberMe}
-                onChange={handleRememberMeChange}
-                label="Remember me"
-              />
-            </Box>
             <CustomButton type="submit">
               Sign Up
             </CustomButton>

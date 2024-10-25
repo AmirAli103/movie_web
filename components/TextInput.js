@@ -1,6 +1,6 @@
 import { TextField } from '@mui/material';
 
-export default function TextInput({ id, label, name, value, onChange, error, helperText }) {
+export default function TextInput({ id, label, name, value, onChange, error, helperText,type }) {
   const styles = {
     inputLabel: {
       color: 'white',
@@ -23,6 +23,7 @@ export default function TextInput({ id, label, name, value, onChange, error, hel
       id={id}
       label={label}
       name={name}
+      type={type}
       value={value}
       onChange={onChange}
       error={!!error}

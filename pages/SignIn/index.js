@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Container } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
@@ -8,12 +8,21 @@ import { postData } from '../../Api/apiFunction';
 import TextInput from '../../components/TextInput';
 import RememberMeCheckbox from '../../components/RememberMeCheckbox';
 
-export default function Login() {
+export default function SignIn() {
   const { t } = useTranslation();
   const router = useRouter();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({ email: '', password: '' });
+
+  // Retrieve email from local storage on component mount
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('savedEmail');
+    if (savedEmail) {
+      setFormData({ ...formData, email: savedEmail });
+      setRememberMe(true); // Check the Remember Me checkbox if there's a saved email
+    }
+  }, []);
 
   const validate = () => {
     let valid = true;
@@ -45,8 +54,21 @@ export default function Login() {
     if (validate()) {
       try {
         const response = await postData('/auth/signin', formData);
-        localStorage.setItem('token', response.token);
-        router.push('/movieScreen');
+        console.log("response: ", JSON.stringify(response));
+
+        // Check if the access_token is present in the response
+        if (response.access_token) {
+          localStorage.setItem('access_token', response.access_token);
+          // Store email if Remember Me is checked
+          if (rememberMe) {
+            localStorage.setItem('savedEmail', formData.email);
+          } else {
+            localStorage.removeItem('savedEmail'); // Clear saved email if not checked
+          }
+          await router.push('/movieScreen'); // You can await here if needed
+        } else {
+          console.error('Token not found in the response.');
+        }
       } catch (error) {
         console.error('Login error:', error);
       }
@@ -97,6 +119,7 @@ export default function Login() {
       marginTop: 2,
       color: 'white',
       fontFamily: 'Montserrat',
+      textAlign: 'center'
     },
     signUpLink: {
       color: '#FFD700',
@@ -123,12 +146,12 @@ export default function Login() {
             />
             <TextInput
               id="password"
-              label={t('login.password')}
+              label={`${t('login.password')} *`}  // Add asterisk here
               name="password"
               type="password"
               value={formData.password}
               onChange={handleChange}
-              error={errors.password}
+              error={!!errors.password}  // Ensure error is a boolean
               helperText={errors.password}
             />
             <Box sx={styles.checkboxContainer}>
